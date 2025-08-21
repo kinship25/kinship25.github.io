@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom T-Shirts - Kinship Graphics & Prints</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      font-family: "Merriweather", serif;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #001f3f, #003366);
+      color: #fff;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      flex-wrap: wrap;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    .logo-img {
+      height: 55px;
+      margin-right: 12px;
+      border-radius: 10px;
+      border: 2px solid gold;
+    }
+    .brand-name {
+      font-size: 1.7rem;
+      margin: 0;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .navbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .navbar a {
+      color: #f9f9f9;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    .navbar a:hover {
+      color: gold;
+    }
+
+    /* Service Detail */
+    .service-detail {
+      max-width: 1000px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+    }
+    .service-detail h2 {
+      font-size: 2.4rem;
+      margin-bottom: 15px;
+      color: #002b5b;
+      border-bottom: 3px solid gold;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+    .service-detail p {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+    }
+
+    /* Gallery */
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .gallery img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .gallery img:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    }
+
+    /* CTA Button */
+    .cta {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 14px 28px;
+      background: linear-gradient(135deg, #002b5b, #004080);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .cta:hover {
+      background: linear-gradient(135deg, #004080, #0066cc);
+      transform: translateY(-3px);
+    }
+
+    /* Footer */
+    .footer {
+      background: #001f3f;
+      color: #d9d9d9;
+      text-align: center;
+      padding: 20px 10px;
+      margin-top: 60px;
+      font-size: 0.9rem;
+      border-top: 2px solid gold;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        text-align: center;
+      }
+      .brand-name {
+        font-size: 1.4rem;
+        margin-top: 8px;
+      }
+      .navbar {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .service-detail {
+        padding: 25px 15px;
+        margin: 30px 10px;
+      }
+      .service-detail h2 {
+        font-size: 2rem;
+      }
+      .gallery {
+        flex-direction: column;
+      }
+      .cta {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <img src="468836663_1049075230563270_7531906506073275578_n.jpg" alt="Kinship Logo" class="logo-img" />
+      <h1 class="brand-name">Kinship Graphics & Prints</h1>
+    </div>
+    <nav class="navbar">
+      <a href="index.html#services">Services</a>
+      <a href="index.html#value">Why Us</a>
+      <a href="index.html#features">Features</a>
+      <a href="index.html#testimonials">Testimonials</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- Service Detail -->
+  <section class="service-detail">
+    <h2>Custom T-Shirts</h2>
+    <p>Express yourself with our <strong>custom-printed t-shirts</strong>. Perfect for team uniforms, events, or personal fashion. Available in cotton and dri-fit materials.</p>
+
+    <h3>Gallery</h3>
+    <div class="gallery">
+      <img src="510428866_1213529634117828_6349789962655437205_n.jpg" alt="Custom T-Shirt Example 1" />
+      <img src="509355313_1213530307451094_1928029654244089877_n.jpg" alt="Custom T-Shirt Example 2" />
+    </div>
+
+    <a href="index.html#services" class="cta">⬅ Back</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 Kinship Graphics & Prints | Designed with Elegance ✨</p>
+  </footer>
+</body>
+</html>
