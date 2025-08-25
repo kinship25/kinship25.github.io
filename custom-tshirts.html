@@ -83,19 +83,20 @@
 
     /* Gallery */
     .gallery {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
-      justify-content: center;
+      margin-top: 15px;
     }
-    .gallery img {
-      max-width: 100%;
-      height: auto;
+    .gallery img, .gallery video {
+      width: 100%;
+      height: 250px; /* fixed size */
+      object-fit: cover; /* keep aspect ratio */
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .gallery img:hover {
+    .gallery img:hover, .gallery video:hover {
       transform: scale(1.03);
       box-shadow: 0 6px 18px rgba(0,0,0,0.25);
     }
@@ -153,7 +154,7 @@
         font-size: 2rem;
       }
       .gallery {
-        flex-direction: column;
+        grid-template-columns: 1fr;
       }
       .cta {
         width: 100%;
@@ -172,8 +173,6 @@
     <nav class="navbar">
       <a href="index.html#services">Services</a>
       <a href="index.html#value">Why Us</a>
-      <a href="index.html#features">Features</a>
-      <a href="index.html#testimonials">Testimonials</a>
       <a href="index.html#contact">Contact</a>
     </nav>
   </header>
@@ -184,9 +183,8 @@
     <p>Express yourself with our <strong>custom-printed t-shirts</strong>. Perfect for team uniforms, events, or personal fashion. Available in cotton and dri-fit materials.</p>
 
     <h3>Gallery</h3>
-    <div class="gallery">
-      <img src="510428866_1213529634117828_6349789962655437205_n.jpg" alt="Custom T-Shirt Example 1" />
-      <img src="509355313_1213530307451094_1928029654244089877_n.jpg" alt="Custom T-Shirt Example 2" />
+    <div id="tshirtsGallery" class="gallery">
+      <!-- Admin uploads will appear here -->
     </div>
 
     <a href="index.html#services" class="cta">⬅ Back</a>
@@ -196,5 +194,26 @@
   <footer class="footer">
     <p>&copy; 2025 Kinship Graphics & Prints | Designed with Elegance ✨</p>
   </footer>
+
+  <!-- Show Uploaded Media -->
+  <script>
+    window.onload = function() {
+      let gallery = document.getElementById("tshirtsGallery");
+      let data = JSON.parse(localStorage.getItem("tshirts")) || [];
+      data.forEach(item => {
+        if (item.type === "image") {
+          let img = document.createElement("img");
+          img.src = item.src;
+          img.alt = "Uploaded Custom T-Shirt";
+          gallery.appendChild(img);
+        } else {
+          let vid = document.createElement("video");
+          vid.src = item.src;
+          vid.controls = true;
+          gallery.appendChild(vid);
+        }
+      });
+    };
+  </script>
 </body>
 </html>
