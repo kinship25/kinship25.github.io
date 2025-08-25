@@ -4,110 +4,105 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kinship Graphics & Prints</title>
-  <link rel="stylesheet" href="style.css" />
   <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: #f5f5f5;
-      color: #333;
-      line-height: 1.6;
-    }
-    h1, h2, h3 { font-family: "Merriweather", serif; }
+    /* Reset */
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, sans-serif; }
+
+    body { line-height:1.6; background:#fff; color:#333; overflow-x:hidden; }
+
+    h1,h2,h3 { font-family:"Merriweather", serif; }
 
     /* Header */
-    .header {
-      background: linear-gradient(135deg, #001f3f, #003366);
-      color: #fff;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    .logo { display: flex; align-items: center; }
-    .logo-img {
-      height: 50px; margin-right: 10px;
-      border-radius: 10px; border: 2px solid gold;
-      animation: float 3s ease-in-out infinite;
-    }
-    .brand-name { font-size: 1.3rem; margin: 0; }
+    .header { background:linear-gradient(135deg,#001f3f,#003366); color:#fff; padding:15px 20px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:1000; }
+    .logo { display:flex; align-items:center; cursor:pointer; z-index:1001; }
+    .logo-img { height:50px; width:50px; border-radius:50%; border:2px solid gold; animation:float 3s ease-in-out infinite; }
+    .brand-name { font-size:1.3rem; margin:0; }
     @keyframes float { 0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)} }
 
-    .navbar { display: flex; gap: 20px; }
+    .navbar { display:flex; gap:20px; z-index:1001; }
     .navbar a { color:#fff; text-decoration:none; font-weight:500; transition:0.3s; }
-    .navbar a:hover { color: gold; }
+    .navbar a:hover { color:gold; }
     .hamburger { display:none; flex-direction:column; cursor:pointer; gap:5px; }
     .hamburger span { width:25px; height:3px; background:white; border-radius:2px; }
     .navbar-mobile { display:none; flex-direction:column; background:#002b5b; padding:15px; }
     .navbar-mobile a { padding:10px 0; color:white; border-bottom:1px solid rgba(255,255,255,0.2); }
 
     /* Hero */
-    .hero { padding:50px 20px; text-align:center; background:url("images/banner-bg.jpg") center/cover no-repeat; color:white; }
-    .hero h2 { font-size:2rem; }
-    .hero p { font-size:1rem; margin-bottom:15px; }
-    .cta { display:inline-block; background:gold; padding:12px 24px; border-radius:8px; font-weight:bold; color:#002b5b; text-decoration:none; transition:0.3s; }
-    .cta:hover { background:#ffdd55; }
+    .hero { padding:80px 20px; text-align:center; background:linear-gradient(135deg,#ffd700,#ffcc33); color:#002b5b; position:relative; z-index:1; }
+    .hero h1 { font-size:2.3rem; margin-bottom:15px; opacity:0; animation:fadeUp 1.2s ease forwards; }
+    .hero p { font-size:1.2rem; margin-bottom:25px; opacity:0; animation:fadeUp 1.2s ease forwards; animation-delay:0.5s; }
+    .cta { display:inline-block; background:transparent; color:#002b5b; padding:12px 28px; border:2px solid #002b5b; border-radius:8px; font-weight:bold; text-decoration:none; transition:0.3s; opacity:0; animation:fadeUp 1s ease forwards; animation-delay:1s; }
+    .cta:hover { background:#002b5b; color:#ffd700; }
+
+    @keyframes fadeUp { from{opacity:0; transform:translateY(30px);} to{opacity:1; transform:translateY(0);} }
 
     /* Services */
-    .services { padding:40px 20px; text-align:center; }
+    .services { padding:40px 20px; text-align:center; position:relative; z-index:1; }
     .service-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:15px; margin-top:20px; }
     .card {
       background:#002b5b; color:white; padding:25px; border-radius:10px;
       text-decoration:none; font-weight:bold; animation:fadeInUp 0.8s forwards;
-      opacity:0; cursor:pointer;
+      opacity:0; cursor:pointer; border:none;
     }
     .card:nth-child(1){animation-delay:0.2s;} .card:nth-child(2){animation-delay:0.4s;}
     .card:nth-child(3){animation-delay:0.6s;} .card:nth-child(4){animation-delay:0.8s;}
     @keyframes fadeInUp { from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
 
-    /* Loading Screen */
-    #loading-screen {
-      position: fixed; top:0; left:0; width:100%; height:100%;
-      background: #001f3f; /* navy blue */
-      display: flex; justify-content: center; align-items: center;
-      z-index: 9999; opacity: 1; transition: opacity 0.6s ease;
-    }
-    .loading-logo {
-      width:120px; height:120px; border-radius:50%;
-      border:3px solid white;
-      animation: spin 2s linear infinite;
-    }
-    @keyframes spin { 0%{transform:rotate(0)}100%{transform:rotate(360deg)} }
+    /* Value */
+    .value { padding:3rem 2rem; text-align:center; }
+    .value h2 { color:#0a1a3f; }
+    .value ul { list-style:none; margin-top:1rem; }
+    .value li { margin:0.5rem 0; font-weight:bold; color:#0a1a3f; }
 
     /* Contact */
-    .contact { padding:40px 20px; text-align:center; background:#fff; }
+    .contact { padding:40px 20px; text-align:center; background:#ffd700; position:relative; z-index:1; }
+    .contact h2 { color:#002b5b; }
     .contact form { max-width:500px; margin:auto; display:flex; flex-direction:column; gap:10px; }
     .contact input,.contact textarea { padding:10px; border:1px solid #ccc; border-radius:5px; }
     .contact button { padding:12px; background:#002b5b; color:white; border:none; border-radius:5px; cursor:pointer; }
     .contact button:hover { background:#004080; }
 
+    /* Footer */
+    .footer { background:#0a1a3f; color:#fff; text-align:center; padding:1rem; position:relative; z-index:1; }
+    .footer a { color:#f1c40f; text-decoration:none; }
+    .footer a:hover { text-decoration:underline; }
+
+    /* Loading Screen */
+    .loading-screen {
+      position:fixed; top:0; left:0; width:100%; height:100%;
+      background:#0a1a3f; display:flex; justify-content:center; align-items:center;
+      z-index:2000; visibility:hidden; opacity:0; transition:opacity 0.3s;
+    }
+    .loading-screen.active { visibility:visible; opacity:1; }
+    .loading-logo {
+      width:80px; height:80px; border-radius:50%;
+      animation:spin 1.2s linear infinite;
+    }
+    @keyframes spin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+
     /* Responsive */
     @media(max-width:768px){
       .navbar{display:none;} .hamburger{display:flex;}
-      .brand-name{font-size:1rem;} .hero h2{font-size:1.5rem;} .hero p{font-size:0.9rem;}
+      .brand-name{font-size:1rem;} .hero h1{font-size:1.5rem;} .hero p{font-size:0.9rem;}
     }
   </style>
 </head>
 <body>
 
 <!-- Loading Screen -->
-<div id="loading-screen">
+<div class="loading-screen" id="loadingScreen">
   <img src="468836663_1049075230563270_7531906506073275578_n.jpg" alt="Loading Logo" class="loading-logo">
 </div>
 
 <!-- Header -->
 <header class="header">
-  <div class="logo">
+  <div class="logo" onclick="adminLogin()">
     <img src="468836663_1049075230563270_7531906506073275578_n.jpg" alt="Kinship Logo" class="logo-img" />
     <h1 class="brand-name">Kinship Graphics & Prints</h1>
   </div>
   <nav class="navbar">
     <a href="#services">Services</a>
     <a href="#value">Why Us</a>
-    <a href="#features">Features</a>
     <a href="#contact">Contact</a>
   </nav>
   <div class="hamburger" onclick="toggleMenu()">
@@ -117,7 +112,6 @@
 <nav class="navbar-mobile" id="mobileMenu">
   <a href="#services" onclick="toggleMenu()">Services</a>
   <a href="#value" onclick="toggleMenu()">Why Us</a>
-  <a href="#features" onclick="toggleMenu()">Features</a>
   <a href="#contact" onclick="toggleMenu()">Contact</a>
 </nav>
 
@@ -132,10 +126,10 @@
 <section id="services" class="services">
   <h2>What We Print</h2>
   <div class="service-grid">
-    <div class="card" onclick="loadPage('tarpaulins.html')">Tarpaulins</div>
-    <div class="card" onclick="loadPage('business-cards.html')">Signage</div>
-    <div class="card" onclick="loadPage('custom-tshirts.html')">Custom T-Shirts</div>
-    <div class="card" onclick="loadPage('stickers.html')">Stickers</div>
+    <button class="card" onclick="loadPage('tarpaulins.html')">Tarpaulins</button>
+    <button class="card" onclick="loadPage('business-cards.html')">Signage</button>
+    <button class="card" onclick="loadPage('custom-tshirts.html')">Custom T-Shirts</button>
+    <button class="card" onclick="loadPage('stickers.html')">Stickers</button>
   </div>
 </section>
 
@@ -147,22 +141,6 @@
     <li>✔ Always Open</li>
     <li>✔ High Print Quality</li>
   </ul>
-</section>
-
-<!-- Features -->
-<section id="features" class="features">
-  <h2>Our Features</h2>
-  <div class="grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-top:20px;">
-    <div class="feature-box" style="background:white;padding:20px;border-radius:10px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
-      <img src="jjj.jpg" alt="Feature 2" style="width:100%;max-height:220px;object-fit:contain;border-radius:8px;margin-bottom:10px;">
-    </div>
-    <div class="feature-box" style="background:white;padding:20px;border-radius:10px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
-      <img src="jjjjj.jpg" alt="Feature 3" style="width:100%;max-height:220px;object-fit:contain;border-radius:8px;margin-bottom:10px;">
-    </div>
-    <div class="feature-box" style="background:white;padding:20px;border-radius:10px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
-      <img src="jjjjjj.jpg" alt="Feature 4" style="width:100%;max-height:220px;object-fit:contain;border-radius:8px;margin-bottom:10px;">
-    </div>
-  </div>
 </section>
 
 <!-- Contact -->
@@ -185,28 +163,23 @@
   </p>
 </footer>
 
-<!-- Script -->
 <script>
   function toggleMenu(){
     const menu=document.getElementById("mobileMenu");
     menu.style.display = menu.style.display==="flex"?"none":"flex";
   }
 
-  function loadPage(url){
-    const loader=document.getElementById("loading-screen");
-    loader.style.opacity="1";
-    loader.style.display="flex";
-    setTimeout(()=>{window.location.href=url;},1200);
+  // Admin Login
+  function adminLogin(){
+    let user = prompt("Enter Username:");
+    let pass = prompt("Enter Password:");
+    if(user === "kinship" && pass === "graphics"){
+      alert("✅ Login Successful!");
+      window.location.href = "admin.html";
+    } else {
+      alert("❌ Incorrect username or password!");
+    }
   }
-
-  // Auto hide loader on page load
-  window.addEventListener("load",()=>{
-    const loader=document.getElementById("loading-screen");
-    setTimeout(()=>{
-      loader.style.opacity="0";
-      setTimeout(()=>loader.style.display="none",600);
-    },500);
-  });
 
   // Contact Form
   document.getElementById("contactForm").addEventListener("submit",function(e){
@@ -222,7 +195,15 @@
     alert("Message sent! ✅");
     document.getElementById("contactForm").reset();
   });
+
+  // Show loading then redirect
+  function loadPage(page){
+    const loader=document.getElementById("loadingScreen");
+    loader.classList.add("active");
+    setTimeout(()=>{ window.location.href=page; }, 1500);
+  }
 </script>
 
 </body>
 </html>
+  
