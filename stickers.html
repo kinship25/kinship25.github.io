@@ -90,14 +90,15 @@
       gap: 15px;
       margin-top: 15px;
     }
-    .gallery img {
+    .gallery img, .gallery video {
       width: 100%;
-      height: auto;
+      height: 250px; /* fixed height */
+      object-fit: cover; /* same size */
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .gallery img:hover {
+    .gallery img:hover, .gallery video:hover {
       transform: scale(1.05);
       box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
@@ -174,8 +175,6 @@
     <nav class="navbar">
       <a href="index.html#services">Services</a>
       <a href="index.html#value">Why Us</a>
-      <a href="index.html#features">Features</a>
-      <a href="index.html#testimonials">Testimonials</a>
       <a href="index.html#contact">Contact</a>
     </nav>
   </header>
@@ -186,9 +185,8 @@
     <p>Our <strong>custom stickers</strong> are waterproof, vibrant, and perfect for branding, packaging, or personal use. Available in different shapes and sizes.</p>
 
     <h3>Gallery</h3>
-    <div class="gallery">
-      <img src="497889970_1184110450393080_780641889637066487_n.jpg" alt="Sticker Example 1" />
-      <img src="498016505_1184046857066106_8724470334126400434_n.jpg" alt="Sticker Example 2" />
+    <div id="stickersGallery" class="gallery">
+      <!-- Admin uploads will appear here -->
     </div>
 
     <a href="index.html#services" class="cta">⬅ Back</a>
@@ -198,5 +196,26 @@
   <footer class="footer">
     <p>&copy; 2025 Kinship Graphics & Prints | Designed with Elegance ✨</p>
   </footer>
+
+  <!-- Show Uploaded Media -->
+  <script>
+    window.onload = function() {
+      let gallery = document.getElementById("stickersGallery");
+      let data = JSON.parse(localStorage.getItem("stickers")) || [];
+      data.forEach(item => {
+        if (item.type === "image") {
+          let img = document.createElement("img");
+          img.src = item.src;
+          img.alt = "Uploaded Sticker";
+          gallery.appendChild(img);
+        } else {
+          let vid = document.createElement("video");
+          vid.src = item.src;
+          vid.controls = true;
+          gallery.appendChild(vid);
+        }
+      });
+    };
+  </script>
 </body>
 </html>
