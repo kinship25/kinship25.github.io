@@ -88,14 +88,15 @@
       gap: 15px;
       margin-top: 15px;
     }
-    .gallery img {
+    .gallery img, .gallery video {
       width: 100%;
-      height: auto;
+      height: 250px; /* fixed uniform size */
+      object-fit: cover; /* no distortion */
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .gallery img:hover {
+    .gallery img:hover, .gallery video:hover {
       transform: scale(1.03);
       box-shadow: 0 6px 18px rgba(0,0,0,0.25);
     }
@@ -172,8 +173,6 @@
     <nav class="navbar">
       <a href="index.html#services">Services</a>
       <a href="index.html#value">Why Us</a>
-      <a href="index.html#features">Features</a>
-      <a href="index.html#testimonials">Testimonials</a>
       <a href="index.html#contact">Contact</a>
     </nav>
   </header>
@@ -184,9 +183,8 @@
     <p>Boost your brand visibility with our <strong>high-quality signage solutions</strong>. Perfect for storefronts, events, promotions, and corporate branding. We use durable materials to ensure a professional and long-lasting finish.</p>
 
     <h3>Gallery</h3>
-    <div class="gallery">
-      <img src="514849693_1227305389406919_220873596460287148_n.jpg" alt="Signage Example 1" />
-      <img src="494684420_1173122998158492_235476319269646828_n.jpg" alt="Signage Example 2" />
+    <div id="signageGallery" class="gallery">
+      <!-- Admin uploads will appear here -->
     </div>
 
     <a href="index.html#services" class="cta">⬅ Back</a>
@@ -196,5 +194,26 @@
   <footer class="footer">
     <p>&copy; 2025 Kinship Graphics & Prints | Designed with Elegance ✨</p>
   </footer>
+
+  <!-- Show Uploaded Media -->
+  <script>
+    window.onload = function() {
+      let gallery = document.getElementById("signageGallery");
+      let data = JSON.parse(localStorage.getItem("signage")) || [];
+      data.forEach(item => {
+        if (item.type === "image") {
+          let img = document.createElement("img");
+          img.src = item.src;
+          img.alt = "Uploaded Signage";
+          gallery.appendChild(img);
+        } else {
+          let vid = document.createElement("video");
+          vid.src = item.src;
+          vid.controls = true;
+          gallery.appendChild(vid);
+        }
+      });
+    };
+  </script>
 </body>
 </html>
