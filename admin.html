@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Mobile support -->
+  <title>Admin Dashboard - Kinship Graphics</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      background: #f4f4f4; 
+      margin: 0; 
+      padding: 0; 
+    }
+    header { 
+      background: #002b5b; 
+      color: white; 
+      padding: 15px; 
+      text-align: center; 
+    }
+    .container { 
+      padding: 15px; 
+    }
+    h2 { 
+      color: #002b5b; 
+      font-size: 1.4rem; 
+    }
+    .section { 
+      background: white; 
+      padding: 15px; 
+      border-radius: 10px; 
+      margin-bottom: 20px; 
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+    }
+    textarea, input, select { 
+      width: 100%; 
+      padding: 10px; 
+      margin: 8px 0; 
+      border: 1px solid #ccc; 
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    button { 
+      padding: 10px 15px; 
+      background: #002b5b; 
+      color: white; 
+      border: none; 
+      border-radius: 5px; 
+      cursor: pointer; 
+      font-size: 1rem;
+    }
+    button:hover { background: #004080; }
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      margin-top: 10px; 
+      font-size: 0.9rem;
+    }
+    table, th, td { 
+      border: 1px solid #ddd; 
+      padding: 8px; 
+      text-align: center; 
+    }
+    img, video { 
+      max-width: 120px; 
+      border-radius: 6px; 
+    }
+    .delete-btn { 
+      background: crimson; 
+      margin-top: 5px; 
+      padding: 6px 10px; 
+      font-size: 0.85rem;
+    }
+    .delete-btn:hover { background: darkred; }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .container { padding: 10px; }
+      header h1 { font-size: 1.4rem; }
+      h2 { font-size: 1.2rem; }
+      table, thead, tbody, th, td, tr { 
+        display: block; 
+        width: 100%; 
+      }
+      thead { display: none; } /* Hide headers */
+      tr { 
+        margin-bottom: 15px; 
+        border: 1px solid #ddd; 
+        border-radius: 8px; 
+        padding: 10px;
+        background: #fafafa;
+      }
+      td { 
+        text-align: left; 
+        padding: 8px 5px; 
+        position: relative; 
+      }
+      td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        display: block;
+        margin-bottom: 4px;
+        color: #002b5b;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header><h1>Admin Dashboard</h1></header>
+  <div class="container">
+
+    <!-- Manage Services -->
+    <div class="section">
+      <h2>Manage Service Photos/Videos</h2>
+      <select id="serviceSelect">
+        <option value="tarpaulins">Tarpaulins</option>
+        <option value="signage">Signage</option>
+        <option value="tshirts">Custom T-Shirts</option>
+        <option value="stickers">Stickers</option>
+      </select>
+      <input type="file" id="mediaFile" accept="image/*,video/*">
+      <button onclick="addMedia()">Upload</button>
+      <div id="mediaList"></div>
+    </div>
+
+    <!-- Messages -->
+    <div class="section">
+      <h2>Customer Messages</h2>
+      <table id="messagesTable">
+        <tr><th>Name</th><th>Email</th><th>Message</th><th>Date</th><th>Action</th></tr>
+      </table>
+    </div>
+  </div>
+
+<script>
+  // Media Upload
+  function addMedia() {
+    let service = document.getElementById("serviceSelect").value;
+    let file = document.getElementById("mediaFile").files[0];
+    if (!file) return alert("Please choose a file!");
+
+    let reader = new FileReader();
+    reader.onload = function(e) {
+      let data = JSON.parse(localStorage.getItem(service)) || [];
+      data.push({ 
+        type: file.type.startsWith("video") ? "video" : "image", 
+        src: e.target.result 
+      });
+      localStorage.setItem(service, JSON.stringify(data));
+      alert("Media uploaded ✅");
+      loadMedia();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Delete Media
+  function deleteMedia(index){
+    let service = document.getElementById("serviceSelect").value;
+    let data = JSON.parse(localStorage.getItem(service)) || [];
+    data.splice(index, 1); 
+    localStorage.setItem(service, JSON.stringify(data));
+    loadMedia();
+  }
+
+  function loadMedia(){
+    let service = document.getElementById("serviceSelect").value;
+    let data = JSON.parse(localStorage.getItem(service)) || [];
+    let html = "<table><tr><th>Preview</th><th>Action</th></tr>";
+    data.forEach((item, index)=>{
+      if(item.type === "image"){
+        html += `<tr>
+                   <td data-label="Preview"><img src="${item.src}"/></td>
+                   <td data-label="Action"><button class="delete-btn" onclick="deleteMedia(${index})">Delete</button></td>
+                 </tr>`;
+      } else {
+        html += `<tr>
+                   <td data-label="Preview"><video src="${item.src}" controls></video></td>
+                   <td data-label="Action"><button class="delete-btn" onclick="deleteMedia(${index})">Delete</button></td>
+                 </tr>`;
+      }
+    });
+    html += "</table>";
+    document.getElementById("mediaList").innerHTML = html;
+  }
+  document.getElementById("serviceSelect").addEventListener("change", loadMedia);
+  loadMedia();
+
+  // Delete Message
+  function deleteMessage(index){
+    let messages = JSON.parse(localStorage.getItem("messages")) || [];
+    messages.splice(index, 1);
+    localStorage.setItem("messages", JSON.stringify(messages));
+    loadMessages();
+  }
+
+  // Load Messages
+  function loadMessages(){
+    let messages = JSON.parse(localStorage.getItem("messages")) || [];
+    let table = document.getElementById("messagesTable");
+    table.innerHTML = "<tr><th>Name</th><th>Email</th><th>Message</th><th>Date</th><th>Action</th></tr>";
+    messages.forEach((m, index)=>{
+      let row = `<tr>
+                   <td data-label="Name">${m.name}</td>
+                   <td data-label="Email">${m.email}</td>
+                   <td data-label="Message">${m.message}</td>
+                   <td data-label="Date">${m.date}</td>
+                   <td data-label="Action"><button class="delete-btn" onclick="deleteMessage(${index})">Delete</button></td>
+                 </tr>`;
+      table.innerHTML += row;
+    });
+  }
+  loadMessages();
+</script>
+</body>
+</html>
