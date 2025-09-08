@@ -81,7 +81,7 @@
         display: block; 
         width: 100%; 
       }
-      thead { display: none; } /* Hide headers */
+      thead { display: none; }
       tr { 
         margin-bottom: 15px; 
         border: 1px solid #ddd; 
@@ -132,83 +132,99 @@
   </div>
 
 <script>
-  // Media Upload
-  function addMedia() {
-    let service = document.getElementById("serviceSelect").value;
-    let file = document.getElementById("mediaFile").files[0];
-    if (!file) return alert("Please choose a file!");
+/* === Media Upload using backend === */
+async function addMedia() {
+  let service = document.getElementById("serviceSelect").value;
+  let fileInput = document.getElementById("mediaFile");
+  let file = fileInput.files[0];
+  if (!file) return alert("Please choose a file!");
 
-    let reader = new FileReader();
-    reader.onload = function(e) {
-      let data = JSON.parse(localStorage.getItem(service)) || [];
-      data.push({ 
-        type: file.type.startsWith("video") ? "video" : "image", 
-        src: e.target.result 
-      });
-      localStorage.setItem(service, JSON.stringify(data));
-      alert("Media uploaded ✅");
-      loadMedia();
-    };
-    reader.readAsDataURL(file);
-  }
+  let formData = new FormData();
+  formData.append("mediaFile", file);
+  formData.append("service", service);
 
-  // Delete Media
-  function deleteMedia(index){
-    let service = document.getElementById("serviceSelect").value;
-    let data = JSON.parse(localStorage.getItem(service)) || [];
-    data.splice(index, 1); 
-    localStorage.setItem(service, JSON.stringify(data));
+  let res = await fetch("upload.php", { method: "POST", body: formData });
+  let result = await res.json();
+
+  if (result.success) {
+    alert("✅ Media uploaded");
     loadMedia();
+    fileInput.value = "";
+  } else {
+    alert("❌ Upload failed: " + result.error);
   }
+}
 
-  function loadMedia(){
-    let service = document.getElementById("serviceSelect").value;
-    let data = JSON.parse(localStorage.getItem(service)) || [];
+async function loadMedia() {
+  let service = document.getElementById("serviceSelect").value;
+  try {
+    let res = await fetch("uploads/data.json?nocache=" + Date.now());
+    if (!res.ok) return;
+    let data = await res.json();
+    let serviceData = data[service] || [];
+
     let html = "<table><tr><th>Preview</th><th>Action</th></tr>";
-    data.forEach((item, index)=>{
-      if(item.type === "image"){
+    serviceData.forEach((item, index) => {
+      if (item.type === "image") {
         html += `<tr>
-                   <td data-label="Preview"><img src="${item.src}"/></td>
-                   <td data-label="Action"><button class="delete-btn" onclick="deleteMedia(${index})">Delete</button></td>
+                  <td data-label="Preview"><img src="${item.src}" /></td>
+                  <td data-label="Action"><button class="delete-btn" onclick="deleteMedia('${service}',${index})">Delete</button></td>
                  </tr>`;
       } else {
         html += `<tr>
-                   <td data-label="Preview"><video src="${item.src}" controls></video></td>
-                   <td data-label="Action"><button class="delete-btn" onclick="deleteMedia(${index})">Delete</button></td>
+                  <td data-label="Preview"><video src="${item.src}" controls></video></td>
+                  <td data-label="Action"><button class="delete-btn" onclick="deleteMedia('${service}',${index})">Delete</button></td>
                  </tr>`;
       }
     });
     html += "</table>";
     document.getElementById("mediaList").innerHTML = html;
+  } catch (err) {
+    console.error("Error loading media:", err);
   }
-  document.getElementById("serviceSelect").addEventListener("change", loadMedia);
-  loadMedia();
+}
 
-  // Delete Message
-  function deleteMessage(index){
-    let messages = JSON.parse(localStorage.getItem("messages")) || [];
-    messages.splice(index, 1);
-    localStorage.setItem("messages", JSON.stringify(messages));
-    loadMessages();
+async function deleteMedia(service, index) {
+  let res = await fetch("delete.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ service, index })
+  });
+  let result = await res.json();
+  if (result.success) {
+    loadMedia();
+  } else {
+    alert("❌ Delete failed");
   }
+}
 
-  // Load Messages
-  function loadMessages(){
-    let messages = JSON.parse(localStorage.getItem("messages")) || [];
-    let table = document.getElementById("messagesTable");
-    table.innerHTML = "<tr><th>Name</th><th>Email</th><th>Message</th><th>Date</th><th>Action</th></tr>";
-    messages.forEach((m, index)=>{
-      let row = `<tr>
-                   <td data-label="Name">${m.name}</td>
-                   <td data-label="Email">${m.email}</td>
-                   <td data-label="Message">${m.message}</td>
-                   <td data-label="Date">${m.date}</td>
-                   <td data-label="Action"><button class="delete-btn" onclick="deleteMessage(${index})">Delete</button></td>
-                 </tr>`;
-      table.innerHTML += row;
-    });
-  }
+document.getElementById("serviceSelect").addEventListener("change", loadMedia);
+loadMedia();
+
+/* === Messages stay in localStorage (same as before) === */
+function deleteMessage(index){
+  let messages = JSON.parse(localStorage.getItem("messages")) || [];
+  messages.splice(index, 1);
+  localStorage.setItem("messages", JSON.stringify(messages));
   loadMessages();
+}
+
+function loadMessages(){
+  let messages = JSON.parse(localStorage.getItem("messages")) || [];
+  let table = document.getElementById("messagesTable");
+  table.innerHTML = "<tr><th>Name</th><th>Email</th><th>Message</th><th>Date</th><th>Action</th></tr>";
+  messages.forEach((m, index)=>{
+    let row = `<tr>
+                 <td data-label="Name">${m.name}</td>
+                 <td data-label="Email">${m.email}</td>
+                 <td data-label="Message">${m.message}</td>
+                 <td data-label="Date">${m.date}</td>
+                 <td data-label="Action"><button class="delete-btn" onclick="deleteMessage(${index})">Delete</button></td>
+               </tr>`;
+    table.innerHTML += row;
+  });
+}
+loadMessages();
 </script>
 </body>
 </html>
